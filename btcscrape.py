@@ -42,7 +42,7 @@ def scrape(currency='GBP'):
 )
 def write_to_db(pricedate, currency, rate):
     '''A function that writes the datetime, currency and the price of bitcoin to the sqlite db'''
-    global wrong_dir #TODO: clean this up
+
     if wrong_dir:
         os.chdir('./dbs/')
         wrong_dir = False
