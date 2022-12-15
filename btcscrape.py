@@ -8,24 +8,19 @@ import time
 import click
 
 
-@click.command()
-@click.option(
-    "--currency",
-    prompt="Currency: ",
-    help="The 3 letter code of the currency to be scraped for the price of bitcoin, i.e. GBP (default)",
-)
+
 def scrape(currency='GBP'):
     '''The function that scrapes the bitcoin price for a specified currency'''
-
-
 
     url = f'https://api.coindesk.com/v1/bpi/currentprice/{currency}.json'
     header = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.132 Safari/537.36'}
 
     req = request.Request(url, headers = header)
     with request.urlopen(req) as data:
+        if data.status != 200:
+            raise ConnectionError
         jdata = json.load(data)
-
+    
     dt = datetime.strptime(jdata['time']['updateduk'], '%b %d, %Y at %H:%M %Z')
     rate = jdata['bpi'][currency]['rate_float']
 
@@ -64,9 +59,4 @@ def write_to_db(pricedate, currency, rate):
     conn.commit()
     conn.close()
     return
-
-
-
-
-
 
