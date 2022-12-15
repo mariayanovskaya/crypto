@@ -6,7 +6,7 @@ lint:
 	pylint --disable=R,C btcscrape
 
 test:
-	pytest -vv --cov-report term-missing --cov=btcscrape test_*.py
+	pytest -q
 
 format:
 	black *.py
